@@ -43,13 +43,15 @@ do
 done
 cd ..
 ```
-** this will take a while **
+
+**this will take a while**
 
 alternatively, if you have the hla-masked hg38 reference genome, you can just add /symlink as appropriate.
 
 ### Downloading and downsampling
 
 Download 5 (arbitrary) individuals from 4 populations ("CEU", "MXL", "ASW", "JPT"]). These are downloaded into ```original_crams``` <br>
+(okay, not quite arbitrary; we only consider sample IDs from the "clean pcs" dataset of Koenig et al. 2024) <br>
 And then downsample them to the following (arbitrary) coverages: [0.001, 0.005, 0.01, 0.05, 0.1, 0.25, 0.50, 1.0, 5., 10.]
 <br><br>
 We want to be good people-- so let's limit the concurrency, both so the 1KG folks don't get mad at as, and so we don't blow out the IO when we downsample.
