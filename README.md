@@ -64,6 +64,8 @@ and if we don't note any errors, do:
 ```
 nohup snakemake -s src/downloadAndDownsample.smk --core 5 &>  dlAndds.outerr &
 ```
+**Give this a day to complete**
+
 
 The directory structure (once complete) is:
 * beds/ # genomic data in bed-file format
