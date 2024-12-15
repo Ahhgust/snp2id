@@ -65,9 +65,9 @@ nohup snakemake -s src/downloadAndDownsample.smk --core 5 &>  dlAndds.outerr &
 
 The directory structure (once complete) is:
 - beds/ # genomic data in bed-file format
-  --  gsa_24v3-0_A2.GRCh38.rand10k.bed # 10,000 autosomal SNP positions; used to estimate coverage
--  src/
---  various snakemake routines go here. For now, just a script to download and downsample is used
+  -- gsa_24v3-0_A2.GRCh38.rand10k.bed # 10,000 autosomal SNP positions; used to estimate coverage
+- src/
+  -- various snakemake routines go here. For now, just a script to download and downsample is used
 
 **  TODO: a snakemake script to genotype
 *  bin/
