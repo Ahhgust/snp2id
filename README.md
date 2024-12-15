@@ -68,21 +68,20 @@ The directory structure (once complete) is:
   - gsa_24v3-0_A2.GRCh38.rand10k.bed # 10,000 autosomal SNP positions; used to estimate coverage
 * src/
   - various snakemake routines go here. For now, just a script to download and downsample is used
-
-**  TODO: a snakemake script to genotype
-*  bin/
-**  samStats.py # provides site-level summary statistics (verbose)
-**  samstats2cov.R  # and summarizes these statistics
-*  logs/
-**  *individual log-files go here*
-*  pop_metadata/
-**  See README; information on what sample-information is available where.
-*  original_crams
-**  the cram files, as downloaded from the 1KG project
-*  downsampled/
-**  cram files that have been downsampled.
-**  e.g., ASW.NA19900.0.005000.cram
-***  format:  POP . SAMPLE . COVERAGE 
+  - TODO: a snakemake script to genotype
+* bin/
+  - samStats.py # provides site-level summary statistics (verbose)
+  - samstats2cov.R  # and summarizes these statistics
+* logs/
+  - *individual log-files go here*
+* pop_metadata/
+  - See README; information on what sample-information is available where.
+* original_crams
+  - the cram files, as downloaded from the 1KG project
+* downsampled/
+  - cram files that have been downsampled.
+  - e.g., ASW.NA19900.0.005000.cram
+  - format:  POP . SAMPLE . COVERAGE 
 
 
 
