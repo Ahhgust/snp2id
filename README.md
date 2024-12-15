@@ -7,7 +7,7 @@
 ### Mamba
 Install mamba. If you haven't already done so, I suggest following the directions found [here](https://www.usna.edu/Users/cs/fknoll/SD211/mamba.html)
 <br>
-(but ignoring the ```mamba create``` command. <br>
+(but ignoring the ```mamba create``` command.) <br>
 Install the dependencies
 ```
 mamba install bioconda::pysam snakemake r-tidyverse r-Hmisc samtools bcftools
@@ -26,7 +26,7 @@ as well as samtools and bcftools (any modern version should do)
 
 ###
 clone this package. <br>
-change directories to whereever you want your data to reside. **then **
+change directories to whereever you want your data to reside. **then**
 ```
 git clone https://github.com/Ahhgust/snp2id.git
 ```
@@ -80,6 +80,7 @@ The directory structure (once complete) is:
   - See README; information on what sample-information is available where.
 * original_crams
   - the cram files, as downloaded from the 1KG project
+  - coverage (and like information) goes here, too.
 * downsampled/
   - cram files that have been downsampled.
   - e.g., ASW.NA19900.0.005000.cram
