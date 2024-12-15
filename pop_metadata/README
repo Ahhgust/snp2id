@@ -1,0 +1,12 @@
+Meta data from:
+https://storage.googleapis.com/gcp-public-data--gnomad/release/3.1/secondary_analyses/hgdp_1kg_v2/metadata_and_qc/gnomad_meta_updated.tsv
+
+And kghgdp_cleanpc_samples.txt is from:
+gs://gcp-public-data--gnomad/resources/hgdp_1kg/phased_haplotypes_v2
+(cite Koenig et al 2024: )
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9900804/
+
+The URL files come directly from the NYGC 1KG project, as well as the Simon's diversity project.
+
+In brief, the two "pops" files are sample sizes for each population based on the meta-data from the URL files;
+they only consider samples that are from the "clean pcs" file from Koenig.
