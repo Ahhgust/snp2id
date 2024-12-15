@@ -18,8 +18,8 @@ Ensure the following packages are installed:
 - pysam
 - snakemake
 - R
--- tidyverse
--- Hmisc
+  - tidyverse
+  - Hmisc
 as well as samtools and bcftools (any modern version should do)
 
 ## Install snp2id
