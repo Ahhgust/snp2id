@@ -24,7 +24,6 @@ as well as samtools and bcftools (any modern version should do)
 
 ## Install snp2id
 
-###
 clone this package. <br>
 change directories to whereever you want your data to reside. **then**
 ```
@@ -87,6 +86,23 @@ The directory structure (once complete) is:
   - cram files that have been downsampled.
   - e.g., ASW.NA19900.0.005000.cram
   - format:  POP . SAMPLE . COVERAGE 
+
+## Genotyping (BCFtools)
+Targeted genotyping (with bcftools) can be performed a la:
+```
+snakemake -c 256  -s src/genotypeBcftools.smk
+```
+(setting the number of cores, 256 in this case, to something sane for your system)
+
+Targeted genotyping takes in a Panel (`panels/*.tsv.gz`) and a downsampled cram file (`downsampled/*.cram`) and creates a VCF file 
+that characterizes every site in the panel. Files get written to: 
+`genotypes/bcftools/{cramfile}_{panel}.vcf.gz`
+
+
+### Panels
+at present we just perform genotyping on autosomal loci from Kintelligence. `genotypeBcftools.smk` will create genotypes for every Panel (`panels/*.tsv.gz`) file present.
+<br>
+Do note that these files are in the format expected by `bcftools call`. Of note, use block gzip (`bgzip`) and index any file you wish to genotype (`tabix`).
 
 
 

@@ -1,0 +1,41 @@
+Author: August Woerner
+Notes on the kinteligence VCF file
+
+We have the RS numbers for the kinship snps in the kintelligence panel
+AND
+we have a bed file for all SNPs in the panel.
+
+The bed file was lifted to the hg38 reference genome. 1 snp failed to liftover (see unmapped, note2self)
+it's on the X, and there is a bug in the reference (hg19) at that position
+
+To get the BCF file, we took all of the common sites (MAF >5% in at least one population) from gnomad (autosomes only, v3_1_2)
+and intersected the hg38 bed file with the gnomad sites VCF file.
+Next, we removed indels (that spanned the site), and we get the right number of SNPs back (9867)
+
+Note: Apparently kintelligence uses "all" of the autosomal SNPs when it runs gedmatch.
+However, one of the SNPs is an INDEL (N29insA) (fine, that's a SNP too)
+and it is unlikely to be used by gedmatch (and it does not appeach to be in gnomad, which is where the annotations come from)
+
+Also, SNP rs3795817 is not annotated as having that RS number (the snp is there, by chromosome position and allele, just the rs is '.')
+I manually re-added the RS number
+AND
+The following phenotypic markers:
+
+chr16   89985917        89985918        rs1805006
+chr16   89986090        89986091        rs11547464
+chr16   89986121        89986122        rs201326893_Y152OCH
+chr16   89986129        89986130        rs1110400
+chr16   89986545        89986546        rs1805009
+
+failed to be found in gnomad (as annotated)
+and they are excluded.
+
+Additionally, the Forenseq reference guide:
+https://verogen.com/wp-content/uploads/2021/03/forenseq-kintelligence-reference-guide-vd2020053-b.pdf
+
+Provides the RS number of 173 SNPs that were excluded (post hoc) for various reasons.
+It seems prudent to exclude them here, too.
+
+
+
+
