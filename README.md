@@ -10,7 +10,7 @@ Install mamba. If you haven't already done so, I suggest following the direction
 (but ignoring the ```mamba create``` command.) <br>
 Install the dependencies
 ```
-mamba install bioconda::pysam snakemake r-tidyverse r-Hmisc samtools bcftools
+mamba install bioconda::pysam snakemake r-tidyverse r-Hmisc samtools bcftools vcftools
 ```
 
 ### Au Naturel
@@ -21,6 +21,7 @@ Ensure the following packages are installed:
   - tidyverse
   - Hmisc
 as well as samtools and bcftools (any modern version should do)
+for supporting ibdgem, apparently we need VCFtools as well. boo.
 
 ## Install snp2id
 

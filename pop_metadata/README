@@ -9,4 +9,6 @@ https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9900804/
 The URL files come directly from the NYGC 1KG project, as well as the Simon's diversity project.
 
 In brief, the two "pops" files are sample sizes for each population based on the meta-data from the URL files;
-they only consider samples that are from the "clean pcs" file from Koenig.
+The ".all" files are unfiltered (all individuals), while if the .all file extension is missing, these only consider samples that are from the "clean pcs" file from Koenig.
+The latter of the files were made using `fgrep -f kghgdp_cleanpc_samples.txt (...)`
+

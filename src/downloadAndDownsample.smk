@@ -1,6 +1,6 @@
 import os, sys, random
 
-VERSION=0.01
+VERSION=0.02
 project_dir = os.path.join(workflow.current_basedir, "..")
 
 # select 5 individuals from 4 populations
@@ -9,7 +9,8 @@ project_dir = os.path.join(workflow.current_basedir, "..")
 nsamps=5
 kpops=["CEU", "MXL", "ASW", "JPT"]
 # and downsample to the specified coverages
-coverages=[0.001, 0.005, 0.01, 0.05, 0.1, 0.25, 0.50, 1.0, 5., 10.]
+# modified to include 30x (high pass)
+coverages=[0.001, 0.005, 0.01, 0.05, 0.1, 0.25, 0.50, 1.0, 5., 10., 30.]
 
 # and stuff needed to relate the above to
 # actually downloading and downsampling
@@ -133,7 +134,8 @@ rule downsample_cram:
         cov = getCov({input.cov})
         i=1 # random number seed for samtools view -s
         for ds in coverages:
-            shell("samtools view -q 20 -T {params.ref} -F 3844 -s %f -o downsampled/{params.fname}.%f.cram {input.cram} " % ( i + ds/cov, ds) )
+            # added max; still makes the correct output when the required coverage > available (as in, it still gives you all of the data).
+            shell("samtools view -q 20 -T {params.ref} -F 3844 -s %f -o downsampled/{params.fname}.%f.cram {input.cram} " % ( i + min(ds/cov,1), ds) )
             shell("samtools index downsampled/{params.fname}.%f.cram" % (ds))
             i += 1
         shell("touch {output}")
