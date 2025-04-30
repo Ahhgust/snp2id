@@ -24,7 +24,7 @@ chroms= [ "chr" + str(i) for i in range(1,23) ]
 pnames="kintelligence"
  
 # input crams
-crams=glob.glob("downsampled/MXL.NA19652*cram")
+crams=glob.glob("downsampled/*cram")
 # ignore the 30x ones.
 lowcovs= [ file for file in crams if file.find("30.00000") ==-1 ]
 # and just grab the filenames (no extension)
@@ -39,7 +39,9 @@ rule all:
     input:
         expand("ibdgem/panels/{chrom}_{panel}.impute.hap" , chrom=chroms, panel=panels),
         expand("ibdgem/pileups/{sprefix}.{pprefix}.pile", sprefix=samps, pprefix=panels),
-        expand("ibdgem/hicov/{hicov}_{lowcov}_{panel}/out.txt", hicov=highcovs, panel=panels, lowcov=samps)
+        expand("ibdgem/hicov/{hicov}_{lowcov}_{panel}/out.txt", hicov=highcovs, panel=panels, lowcov=samps),
+        expand("ibdgem/denom/{lowcov}_{panel}/{chrom}/out.txt", lowcov=samps,panel=panels, chrom=chroms)
+        
         
 
 def sn2s(sobj):
@@ -125,15 +127,44 @@ rule hi_cov_ibdgem:
         rm -f {output}
         touch {output}
         
+        dname=`dirname {output}`
+        mkdir -p $dname
         for chrom in chr1  chr2  chr3  chr4  chr5  chr6  chr7  chr8  chr9  chr10  chr11  chr12  chr13  chr14  chr15  chr16  chr17  chr18  chr19  chr20  chr21  chr22;
         do
-          mkdir -p $outdir/$chrom
           if [[ $(fgrep -c -w $chrom {input.pile}) -ne 0 ]]; then #ibdgem crashes if there are no snps found on the chromosome
+             mkdir -p $outdir/$chrom
              {params.ibdgem} -V {input.vcf} -P {input.pile} -c $chrom --LD -O $outdir/$chrom 2>> {log}
              {params.fcat} -h $outdir/$chrom/*summary.txt | tail -n +2 >> {output}
+             cat $outdir/$chrom/*summary.txt > $dname/$chrom.summary
+             fgrep -v '#' $outdir/$chrom/*tab.txt > $dname/$chrom.tab
           fi
         done
-
         rm -rf $outdir
         """
         
+rule panel_ibdgem:
+    input:
+        panel="ibdgem/panels/{chrom}_{panel}.impute.hap",
+        pile="ibdgem/pileups/{lowcov}.{panel}.pile"
+    output:
+        "ibdgem/denom/{lowcov}_{panel}/{chrom}/out.txt" # a little stickier than it looks
+    wildcard_constraints:
+        panel = "|".join(panels)
+    params:
+        ibdgem=os.path.join(project_dir, "bin", "ibdgem"),
+        fcat="perl " + os.path.join(project_dir, "bin", "fcat.pl")
+    log:
+        "ibdgem/logs/{lowcov}_{chrom}_{panel}.denom.log"
+    run:
+        i=input.panel[0:-4] #trims off .hap
+        legend=i + ".legend" 
+        indv=i+ ".hap.indv"
+        outdir=str(output)[0:-8] # trims off /out.txt
+
+
+        # ibdgem will crash iff there are 0 snps for a given chromosome. 
+        # as this command is done per individual per chromosome (and not per individual, as per the numerator in the LR
+        # this rule will sometimes fail. hence the tolerance for failure (pipefile command)
+        shell("set +o pipefail && mkdir -p {outdir} && touch {output} && \
+            {params.ibdgem} -H {input.panel} -L {legend} -I {indv} -c {wildcards.chrom} -P {input.pile} --LD -O {outdir} 2> {log} && \
+            {params.fcat} -h {outdir}/*summary.txt > {output} 2>> {log} || true")
