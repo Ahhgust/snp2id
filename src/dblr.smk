@@ -30,8 +30,8 @@ rpops=['NFE', 'AFR', "EAS", "AMR"] # gnomad population labels
 rule all:
     input:
         expand("dblr/panels/{panel}.{rpop}.csv" , panel=panels, rpop=rpops),
-        expand("dblr/lowpass/{prefix}.weights", prefix=samps[0]), # TODO: set to all of samps ONCE WE KNOW IT WORKS
-        expand("dblr/hipass/{prefix}.{panel}.txt", prefix=highcovs[0], panel=panels)
+        expand("dblr/lowpass/{prefix}/Weights_Export.xml", prefix=samps), # TODO: set to all of samps ONCE WE KNOW IT WORKS
+        expand("dblr/hipass/{prefix}.{panel}.txt", prefix=highcovs, panel=panels)
 
 def sn2s(sobj):
     """
@@ -54,7 +54,7 @@ rule make_ibdgem_panels:
         "dblr/panels/{panel}.{rpop}.csv"
     params:
         rpop="{rpop}",
-        binary="python3 " + os.path.join(project_dir, "bin", "gnomad2allelefreqs.py")
+        binary="python3 " + os.path.join(project_dir, "bin", "gnomad2allelefreqs_long.py")
     log:
         "dblr/logs/{panel}.{rpop}.log"	
     shell: 
@@ -66,14 +66,17 @@ rule make_lowpass:
     input:
         vcf="genotypes/bcftools/{prefix}.vcf.gz"
     output:
-        "dblr/lowpass/{prefix}.weights"
+        file="dblr/lowpass/{prefix}/weights",
+        xml="dblr/lowpass/{prefix}/Weights_Export.xml"
     params:
-        binary="python3 " + os.path.join(project_dir, "bin", "vcf2dblr.py")
+        binary="python3 " + os.path.join(project_dir, "bin", "vcf2dblr.py"),
+        xbinary="python3 " + os.path.join(project_dir, "bin", "makeDblrWeights.py") 
     log:
         "dblr/logs/lowpass.{prefix}.log"	
-    shell: 
+    shell: # output is a pair; the weights file has the genotype probabilities, the XML file simply says where to find the weights file.
         """
-        bcftools view {input.vcf} | {params.binary} > {output} 2> {log}
+        bcftools view {input.vcf} | {params.binary} > {output.file} 2> {log}
+        {params.xbinary} `basename {input.vcf}` weights > {output.xml} 2>> {log}
         """
 
 rule make_hipass:
@@ -92,5 +95,5 @@ rule make_hipass:
         bcftools view {input.vcf} | {params.binary} > {output} 2> {log}
         """
 
-
+# TODO;  add dblr_long2wide
 

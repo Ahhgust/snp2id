@@ -25,8 +25,12 @@ afTag = "AF_" + pop + "="
 anTag = "AN_" + pop + "="
 
 
-print("Locus,Allele,Allele Seq,Count,Frequency")
+#print("Locus,Allele,Allele Seq,Count,Frequency")
 
+loc2freqs = {}
+
+a2i={"A": 0, "C": 1, "G" : 2, "T": 3, "N": 4}
+i2a = "ACGTN"
 for line in sys.stdin:
     if line.startswith("#"):
         continue
@@ -56,19 +60,37 @@ for line in sys.stdin:
         continue
         
     # as w/ the genotype weights file, chrom, position, ref, alt
-    locus=sp[0] + "_" + sp[1] + "_" + sp[3] + "_" + sp[4]
+    locus="rs_" + sp[0] + "_" + sp[1] + "_" + sp[3] + "_" + sp[4]
+    loc2freqs[ locus ] =[0] * 5
+    inner = loc2freqs[ locus ]
     
     altFreq=0.
     nalleles=len(af)
     for i in range(nalleles):
-        print(locus, ord(altAlleles[i])-64, altAlleles[i], round(an[i]*af[i]), af[i], sep=",")
+        #print(locus, ord(altAlleles[i])-64, altAlleles[i], round(an[i]*af[i]), af[i], sep=",")
+        ind = a2i[ altAlleles[i] ]
+        inner[ ind ] = af[i]
         altFreq += af[i]
     
-    anMean =round( sum(an)/len(an) ) # should be singular, but just in case.
     refFreq = 1.0-altFreq
+ 
+    ind = a2i[ refAllele ]
+    inner[ ind ] = refFreq
+    inner[ 4 ] = an[0] # and the total sample size...
     
-    print(locus, ord(refAllele)-64, refAllele, round(refFreq*anMean), refFreq, sep=",")
+    #print(locus, ord(refAllele)-64, refAllele, round(refFreq*anMean), refFreq, sep=",")
 
+loci = list( loc2freqs.keys() )
+print("Allele,", ",".join(loci), sep="")
+for ind in range(5):
+    print(i2a[ind], end="")
+    for loc in loci:
+        inner = loc2freqs[loc]
+        if inner[ind] < 0:
+            print(",0.", end="")
+        else:
+            print(",", inner[ind], sep="", end="")
     
+    print()
     
     

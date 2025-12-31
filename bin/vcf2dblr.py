@@ -8,8 +8,6 @@
 # it does not lie about what the corresponding genotype probabilities are, though.
 # in my thinking, it is the probabilities that matter, not the observations.
 
-import argparse
-import os
 import sys
 
 
@@ -55,19 +53,24 @@ for line in sys.stdin:
     # biallelic only...
     if len(pls) != 3:
         continue
-      
+    
+    # remove leading/trailing whitespace. I'm unsure why this is needed, but it doesn't hurt.
+    sp[3] = sp[3].strip(" ")
+    sp[4] = sp[4].strip(" ")
+    
     probs = [ 10**(i/-10.) for i in pls ] # Qscores to likelihood (ratios)
     s = sum(probs)  # 
     probs = [ i/s for i in probs ] # then normalized into "probabilities"
     
-    # locus name: chr1:400_A_C
-    lname = sp[0] + "_" + sp[1] + "_" + sp[3] + "_" + sp[4]
+    # locus name: rs_chr1:400_A_C
+    lname = "rs_"+sp[0] + "_" + sp[1] + "_" + sp[3] + "_" + sp[4]
     locusCounter +=1
     print("Locus ", locusCounter, " (", lname , ")", sep="")
-    print("Observed: ", sp[3] , ",", sp[4], sep="")
-    print(sp[3] , "\t", sp[3], "\t\t", probs[0])
-    print(sp[3] , "\t", sp[3], "\t\t", probs[1])    
-    print(sp[4] , "\t", sp[4], "\t\t", probs[2])
+    print("Observed: ", sp[3] , ",", sp[4], sep="") # not required for file version 2, apparently.
+    
+    print(sp[3] , "\t", sp[3], "\t\t", probs[0], sep="")
+    print(sp[3] , "\t", sp[4], "\t\t", probs[1], sep="")    
+    print(sp[4] , "\t", sp[4], "\t\t", probs[2], sep="")
     #print(meta, geno, line, sep="\n")
     #exit(1)
 

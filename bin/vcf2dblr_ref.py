@@ -36,8 +36,8 @@ for line in sys.stdin:
     # skip no calls
     if geno[0][0] == '.':
         continue
-
-    locus=sp[0] + "_" + sp[1] + "_" + sp[3] + "_" + sp[4]
+    # note: apparently dblr needs snps to have a rs prefix.
+    locus="rs_" + sp[0] + "_" + sp[1] + "_" + sp[3] + "_" + sp[4]
     
     alleles=[sp[3],  sp[4]]
     
