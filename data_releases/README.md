@@ -13,7 +13,7 @@ Or click the [link](https://www.dropbox.com/scl/fi/9ej04ejxnzebe4veyg71r/Downsam
 ## GLIMPSE
 And the GLIMPSE (v2.0.0) files are too big to share as well. <br>
 You can click onthe following [dropbox link](https://www.dropbox.com/scl/fi/0loa78rytg0w7wpy4lky8/Glimpse_Tapirpanel.tar?rlkey=97rn55j2n1hxdo6w35bnfaca0&dl=1) <br>
-to get the refined/imputed genotype calls. Note that the panel in this case is essentially the 1000 Genomes Project (+HGDP). It is ~30M sites that are also used in Tapir (doi: 0.1016/j.fsigen.2025.103387). <br>
+to get the refined/imputed genotype calls. Note that the panel in this case is essentially the 1000 Genomes Project (+HGDP). It is ~30M sites that are also used in Tapir (doi: 10.1016/j.fsigen.2025.103387). <br>
 I also provide just the GSA (as well as just kintelligence) calls [here](https://www.dropbox.com/scl/fi/wkjudodb9bf83j7gyc6uc/Glimpse_Tapirpanel_gsa_and_kintell.tar?rlkey=onwp8a9syiy0d77qvbjxtztxe&dl=1) <br>
 strictly speaking, these files are the intersection of the GSA/kintell with the sites from Tapir. <br>
 
