@@ -10,13 +10,14 @@ Install mamba. If you haven't already done so, I suggest following the direction
 (but ignoring the ```mamba create``` command.) <br>
 Install the dependencies
 ```
-mamba install bioconda::pysam snakemake r-tidyverse r-Hmisc samtools bcftools vcftools
+mamba install bioconda::pysam snakemake r-tidyverse r-Hmisc samtools bcftools vcftools awscli
 ```
 
 ### Au Naturel
 Ensure the following packages are installed:
 - pysam
 - snakemake
+- awscli (good luck)
 - R
   - tidyverse
   - Hmisc
@@ -64,6 +65,41 @@ and if we don't note any errors, do:
 ```
 nohup snakemake -s src/downloadAndDownsample.smk --core 5 &>  dlAndds.outerr &
 ```
+
+### Take Deux!
+Okay, so it was impressed on me that having relatives can be important.
+As such, the original download snakemake file is now called: `src/downloadAndDownsampleOriginal.smk` (catchy, I know) <br>
+I made some deep cuts to: `src/downloadAndDownsample.smk` as well.
+Namely, it now grabs 4 trios in the: MXL, ASW, CEU and YRI populations. (trios meaning mom, dad, kid)
+In addition, I manually added: <br>
+two half siblings, followed by father of the second and shared mother <br>
+`forcible["YRI"] = ["NA18913", "NA19240", "NA19239", "NA19238"]`
+full siblings (first two) and parents (second two)
+`forcible["MXL"] = ["NA19662", "NA19685", "NA19661", "NA19660"]`
+and another quartet; full siblings (first two) and parents (second two)
+`forcible["MXL"].extend( ["NA19675", "NA19680", "NA19679", "NA19678"])`
+
+As well, I added CEPH pedigree 1463. This one was a total pain, as it's housed elsewhere. See:
+```
+url_flat["CEU.NA12889"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2281.v4.2.4.grc38.bam"
+url_flat["CEU.NA12890"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2280.v4.2.4.grc38.bam" # current MIA. issue raised on github repo
+url_flat["CEU.NA12891"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2214.v4.2.4.grc38.bam"
+url_flat["CEU.NA12892"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2213.v4.2.4.grc38.bam"
+url_flat["CEU.NA12877"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2209.v4.2.4.grc38.bam"
+url_flat["CEU.NA12878"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2188.v4.2.4.grc38.bam"
+url_flat["CEU.NA12879"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2216.v4.2.4.grc38.bam"
+url_flat["CEU.NA12881"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2211.v4.2.4.grc38.bam"
+url_flat["CEU.NA12882"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2212.v4.2.4.grc38.bam"
+url_flat["CEU.NA12885"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2217.v4.2.4.grc38.bam"
+url_flat["CEU.NA12886"] = "s3://platinum-pedigree-data/data/illumina/mapped/GRCh38/2189.v4.2.4.grc38.bam"
+```
+
+Note that one of the samples is missing from AWS.
+See [this repo](https://github.com/Platinum-Pedigree-Consortium/Platinum-Pedigree-Datasets) for a full description.
+(and no, I haven't found gen 4 data at all!)
+
+### Practicals
+
 **Give this a day to complete**
 
 

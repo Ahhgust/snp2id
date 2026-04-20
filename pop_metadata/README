@@ -12,3 +12,9 @@ In brief, the two "pops" files are sample sizes for each population based on the
 The ".all" files are unfiltered (all individuals), while if the .all file extension is missing, these only consider samples that are from the "clean pcs" file from Koenig.
 The latter of the files were made using `fgrep -f kghgdp_cleanpc_samples.txt (...)`
 
+# Update: 4/18/2026
+A pedigree file from the 1kG project was downloaded using
+```
+wget -O - "http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000G_2504_high_coverage/working/1kGP.3202_samples.pedigree_info.txt" > 1kGP.3202_samples.pedigree_info.txt
+```
+
