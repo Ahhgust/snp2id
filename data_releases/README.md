@@ -7,7 +7,7 @@ Note that all results are **unfiltered**. If you're using BCFtools, and using th
 I've provided an updated callset; this includes data from several pedigrees in the 1000 Genomes Project (and beyond!).
 <br>
 See the `pop_metadata` directory for corresponding pedigree information.
-Here are some dropbox links to the data:
+Here are some dropbox links to the data:<br>
 [BCFtools](https://www.dropbox.com/scl/fi/h5sgqpa20zp8n5kkic5fs/bcftools.tar.gz?rlkey=u980whbnilwg79kzunuy8bu3d&dl=1)
 <br>
 [GLIMPSE](https://www.dropbox.com/scl/fi/jsvekfacrvpic1z6xy08g/glimpse2.tar.gz?rlkey=bv2no0ph799jtiu4ne4ejxmhf&dl=1)
