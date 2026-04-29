@@ -3,6 +3,21 @@ Just to make life a bit easier, we also provide some "canned" results from the p
 Some data are small enough to share (directly), while others are given as dropbox links because they're big. <br>
 Note that all results are **unfiltered**. If you're using BCFtools, and using the PL tag in particular, I wouldn't worry, but the called genotypes (in general) will not be so great (especially <=5x). For GLIMPSE the concerns are a bit more subtle. Namely, sites with high posterior probability (GP~1) may simply reflect a large prior. I doubt such sites are what you want, especially as coverage wanes. I (personally) would recommend filtering on a Bayes factor (BF); one perhaps appropriate way is to filter on the posterior odds / the prior odds (naive, assuming Hardy Weinberg equilibrium), though there certainly are other ways to do it.
 
+## Data from families
+I've provided an updated callset; this includes data from several pedigrees in the 1000 Genomes Project (and beyond!).
+<br>
+See the `pop_metadata` directory for corresponding pedigree information.
+Here are some dropbox links to the data:
+[BCFtools](https://www.dropbox.com/scl/fi/h5sgqpa20zp8n5kkic5fs/bcftools.tar.gz?rlkey=u980whbnilwg79kzunuy8bu3d&dl=1)
+<br>
+[GLIMPSE](https://www.dropbox.com/scl/fi/jsvekfacrvpic1z6xy08g/glimpse2.tar.gz?rlkey=bv2no0ph799jtiu4ne4ejxmhf&dl=1)
+<br>
+[GLIMPSE_subsampling](https://www.dropbox.com/scl/fi/qzv5zevy03rlkk8mkzjrt/glimpse2_subsample.tar.gz?rlkey=ujx8o3l1fd17008wnd49hae0f&dl=1)
+<br>
+Note that the latter file is... big. 285Gb compressed.<br>
+In addition, I added the FORCE panel (autosomal SNPs) explicitly as well (I was/am unsure if it is fully contained w/in the GSA).
+
+
 ## GSA
 The GSA files are too big to (easily) post here. <br>
 Please download the GSA files from: <br>
