@@ -12,7 +12,7 @@ for f in filesToRead:
     samp = b.split(".")[0:2]
     highcovs.append(".".join(samp) )
     
-pnames="kintelligence"
+#pnames="kintelligence"
  
 files= glob.glob( os.path.join(project_dir, "genotypes", "bcftools", "*.vcf.gz") )
 # ignore the 30x ones.
@@ -21,9 +21,9 @@ lowcovs= [ file for file in files if file.find("30.00000") ==-1 ]
 samps = [ os.path.basename( file[:-7] ) for file in lowcovs ]
 
 # TODO: this can be dynamic.
-panels=["kintelligence.hg38.autossnps_except6"]
+panels=["kintelligence.hg38.autossnps_except6", "force_hg38_autosnps"]
 callers=["bcftools"]
-kpops=["CEU", "MXL", "ASW", "JPT"]
+#kpops=["CEU", "MXL", "ASW", "JPT"]
 rpops=['NFE', 'AFR', "EAS", "AMR"] # gnomad population labels
 #nonfinnish euro, african/aa, east asian, admixed american
 

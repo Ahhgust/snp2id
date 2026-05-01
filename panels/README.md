@@ -34,5 +34,14 @@ tabix -s1 -b2 -e2 force_hg38_autosnps.tsv.gz
 tabix force_hg38_autosnps.tsv.gz chr22 | head
 bcftools view -H force_hg38_autosnps.bcf | perl -e 'while (<>){ chomp; @s = split /\t/; print "$s[0]\t", $s[1]-1 , "\t$s[1]\n";}' > force_hg38_autosnps.bed
 ```
+### Allele frequencies
+gnomad (v3.1.1) AF_ and AN_ annotations were added; autosomes only, and only considers sites with 5%MAF <br>
+In brief, some of the GSA sites will be unannotated. Maybe we should'nt be looking at them anyways?
 
+### cM 
+I repurposed a script from Amy Williams to add cM positions to a VCF file.
+The "hapmap" genetic map was used for the annotations a la:
+```
+bcftools view GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_no_unanalyzed_AND_chrXY.afannos.anannos.bcf | perl ../bin/add-map-vcf.pl /eva/edatums/reference_materials/genetic_maps/hg38/Hapmap_Liftover/chr*.geneticMap | bcftools view -Oz9 -o GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_no_unanalyzed_AND_chrXY.afannos.anannos.hapmapgmap.vcf.gz
+```
 
