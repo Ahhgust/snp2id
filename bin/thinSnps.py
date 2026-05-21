@@ -15,6 +15,8 @@ parser.add_argument('-t', '--tag-in-vcf', dest='T', help="The FILTER field in th
 parser.add_argument('-c', '--min-cm-apart', dest='C', help="The minimum distanct in cM between markers", default=1.0, type=float)
 parser.add_argument('-f', '--min-maf', dest='F', help="The minimum minor allele frequency", default=0.2, type=float)
 parser.add_argument('-F', '--min-maf-tag', dest='AF', help="The minimum minor allele frequency TAG in the vcf file (same as cM file)", default="AF")
+parser.add_argument('-v', '--transversions_only', dest='V', default=False, help="Only outputs transversions, ie, sites more resilient to DNA damage", action='store_true')
+
 
 def getGmap(filename, tag,aftag, minAF):
     """
@@ -84,7 +86,7 @@ def getGmap(filename, tag,aftag, minAF):
 
 (results, xtra) = parser.parse_known_args(sys.argv[1:])
 
-def thinSnpsSimple(gmap, cmsep):
+def thinSnpsSimple(gmap, cmsep, transversionsOnly):
     """
     takes in a gmap dictionary of dictionaries
     parses stdin, prints to standard out a VCF file that has 
@@ -107,8 +109,24 @@ def thinSnpsSimple(gmap, cmsep):
         # assumes vcf file in sane
         if chrom not in gmap:
             break
-            
         
+        # note, this assumes that the alt allele is annotated, regardless of the genotype called (e.g., it's not . even when the call is 0/0)
+        # it's how this package genotypes, so it's OK
+        # but this logic may not port to other callers
+        # in practice this removes a lot of markers. this is a bit heavy handed, too.
+        if transversionsOnly:   
+            # slightly simpler to just remove transitions
+            if sp[3] == 'C' and sp[4] == 'T':
+                continue
+            elif sp[3] == 'T' and sp[4] == 'C':
+                continue           
+            elif sp[3] == 'G' and sp[4] == 'A':
+                continue 
+            elif sp[3] == 'A' and sp[4] == 'G':
+                continue 
+            if len(sp[3]) !=1 or len(sp[4]) != 1: # additional check for snp-ness
+                continue
+            
         cms = gmap[chrom]
         if pos not in cms:
             continue
@@ -145,5 +163,5 @@ if results.M == "" or not os.path.exists(results.M):
 
 gmap = getGmap(results.M, results.T, results.AF, results.F)
 
-thinSnpsSimple(gmap, results.C)
+thinSnpsSimple(gmap, results.C, results.V)
 

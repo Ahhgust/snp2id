@@ -24,6 +24,22 @@ Please download the GSA files from: <br>
 https://www.dropbox.com/scl/fi/9ej04ejxnzebe4veyg71r/Downsampling_Bcftools_GSA.tar?rlkey=72vm92dlifsn5io564sap3s4u&dl=1
 <br>
 Or click the [link](https://www.dropbox.com/scl/fi/9ej04ejxnzebe4veyg71r/Downsampling_Bcftools_GSA.tar?rlkey=72vm92dlifsn5io564sap3s4u&dl=1)
+### GSA Thinning
+SNP Thinning was also performed on the GSA callset. Relevant routines were added to the genotyping snakemake file.<br>
+The following cM separations were attempted: [1, 10, 20, 50] as well as a minimum MAF of either 0.01 or 0.20. I only added the 0.20 files as thinning on 0.01 provides additional no extra information (in terms of number of snps; likely less information in terms of inference).
+The data are provided on the following dropbox [link](https://www.dropbox.com/scl/fi/74wuealtgmrgy656qxkwp/thinned_genotypes_0.2.tar?rlkey=jx5ocel3w341c4scgunqe84uq&dl=1) <br>
+An example file is<br>
+ASW.NA19917.5.000000_GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_1_0.2.vcf.gz <br>
+| Label | Meaning |
+|ASW | African American (Southwest, 1kGP label) |
+|NA19917 | Sample ID (1kGP)  |
+|5.00000 | Mean read depth (autosomal, expected; ie, coverage) |
+|GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include | (the SNP panel; see `panels/`. This is an autosomal subset of the GSA) |
+| 1_0.2 | 1 cM apart, min MAF of 0.2 |
+| .vcf.gz| File format |
+
+
+
 
 ## GLIMPSE
 And the GLIMPSE (v2.0.0) files are too big to share as well. <br>

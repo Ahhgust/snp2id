@@ -6,8 +6,15 @@ import os, sys, glob
 # but one reference panel for each population (holding out, for example, the YRI when a YRI
 # sample is imputed/refined.
 # Please reach out to me if you want these panels. They're... big. too big to easily share.
+#
+# 5/21/2026
+# I added SNP thinning (wrt to the AF and cM).
+# this only makes sense if we consider the GSA sites, likewise, it only makes sense if we consider
+# the bcftools genotypes ... sooo...
+# The AF annotations come from the phase 4 1kgP (NYGC); the cM positions come from the hapmap genetic map.
+# fun times!
 
-VERSION=0.01
+VERSION=0.02
 project_dir = os.path.join(workflow.current_basedir, "..")
 
 panels=glob.glob( os.path.join(project_dir, "panels", "*.tsv.gz"))
@@ -20,15 +27,22 @@ fnames= []
 for f in filesToRead:
     b = os.path.basename(f)[0:-5] # trims off the .cram; note the file format is hard coded
     fnames.append( b )
-
+    
  
 pnames = []
 for p in panels:
     pnames.append( os.path.basename(p)[0:-7] ) # and the .tsv.gz
 
+#overly broad search
+cMs = ["1", "10", "20", "50"]
+MAFs=["0.01", "0.2"]
+
+genomicPanels=[pane for pane in pnames if pane.find("GSA")>=0]
+
 rule main:
     input: 
-        expand("genotypes/bcftools/{fname}_{panel}.vcf.gz", fname= fnames, panel=pnames),
+        expand("genotypes/bcftools/{fname}_{panel}.vcf.gz", fname=fnames, panel=pnames),
+        expand("genotypes/bcftools_thinned/{fname}_{panel}_{thin}_{maf}.vcf.gz", fname=fnames, panel=genomicPanels, thin=cMs, maf=MAFs),
         expand("genotypes/glimpse2/{fname}.vcf.gz", fname= fnames),
         expand("genotypes/glimpse2_subsample/{fname}_{panel}.vcf.gz", fname= fnames, panel=pnames)
         
@@ -56,6 +70,30 @@ rule genotype_bcftools:
         {params.bcftoolsbinary} call {params.call_params} -T {input.panel} --threads {threads} -o {output}) 2> {log} &&\
         {params.bcftoolsbinary} index --threads {threads} {output} 2>> {log}
         """
+
+# thins out genotypes from bcftools. in particular, creates a maximal cardinality set conditioned on a minimum cM separation and a minimum MAF.
+# (just so happens that a greedy procedure gives you that set, which helps!)
+rule thin_bcftools:
+    input:
+        "genotypes/bcftools/{fname}_{panel}.vcf.gz"
+    output:
+        "genotypes/bcftools_thinned/{fname}_{panel}_{thin}_{maf}.vcf.gz"  
+    params:
+        bcftoolsbinary="bcftools", # pull from mamba/conda env,
+        cm=lambda wildcards: wildcards.thin,
+        maf=lambda wildcards: wildcards.maf,
+        panel=os.path.join(project_dir, "panels", "GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_no_unanalyzed_AND_chrXY.afannos.anannos.hapmapgmap.1kganno.vcf.gz"),
+        thinbinary="python3 " + os.path.join(project_dir, "bin", "thinSnps.py")
+    wildcard_constraints:
+        panel= "|".join(pnames)
+    log:
+        "logs/bcftools_thin.{fname}_{panel}_{thin}_{maf}.log"
+    shell:
+        """
+        ({params.bcftoolsbinary} view {input} | {params.thinbinary} -m {params.panel} -F AF_1kg -c {params.cm} -f {params.maf} | {params.bcftoolsbinary} view -o {output}) 2> {log}
+        {params.bcftoolsbinary} index {output} 2>> {log}
+        """    
+
 
 # intersects the tapir imputation panel with the panels considered. (at present, kintell and GSA; only autosomes)
 rule subsample_glimpse:

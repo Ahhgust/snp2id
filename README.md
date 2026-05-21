@@ -138,6 +138,9 @@ that characterizes every site in the panel. Files get written to:
 
 ### Panels
 at present we just perform genotyping on autosomal loci from Kintelligence. `genotypeBcftools.smk` will create genotypes for every Panel (`panels/*.tsv.gz`) file present.
+### Update
+as of 5/21/2026 we are genotyping kintelligence, force as well as autosomal sites in the GSA. THe last of which we provide markers that have been thinned (wrt allele frequency and cM separation)
+
 <br>
 Do note that these files are in the format expected by `bcftools call`. Of note, use block gzip (`bgzip`) and index any file you wish to genotype (`tabix`).
 
