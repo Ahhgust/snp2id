@@ -38,6 +38,18 @@ bcftools view -H force_hg38_autosnps.bcf | perl -e 'while (<>){ chomp; @s = spli
 gnomad (v3.1.1) AF_ and AN_ annotations were added; autosomes only, and only considers sites with 5%MAF <br>
 In brief, some of the GSA sites will be unannotated. Maybe we should'nt be looking at them anyways?
 
+###
+The 1kG AF was also added (AF_1kg). Annotations comes from phase 4 (NYGC) using the follow bcftools annotate command
+```
+bcftools annotate --regions-overlap 2 -Oz9 --threads 4 -o GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_no_unanalyzed_AND_chrXY.afannos.anannos.hapmapgmap.1kganno.vcf.gz -a GSA_Subset/1kGP_high_coverage_Illumina.GSA_SNP2ID.filtered.SNV_INDEL_SV_phased_panel.anno.vcf.gz -c 'INFO/AF_1kg' GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_no_unanalyzed_AND_chrXY.afannos.anannos.hapmapgmap.vcf.gz && bcftools index GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_no_unanalyzed_AND_chrXY.afannos.anannos.hapmapgmap.1kganno.vcf.gz
+```
+where `GSA_Subset/1kGP_high_coverage_Illumina.GSA_SNP2ID.filtered.SNV_INDEL_SV_phased_panel.anno.vcf.gz` is a site-only VCF where the AF tag was changed using bcftools annotate
+```
+bcftools annotate -Oz9 --threads 4 -o 1kGP_high_coverage_Illumina.GSA_SNP2ID.filtered.SNV_INDEL_SV_phased_panel.anno.vcf.gz -c 'INFO/AF_1kg:=INFO/AF' 1kGP_high_coverage_Illumina.GSA_SNP2ID.filtered.SNV_INDEL_SV_phased_panel.vcf.gz && bcftools index 1kGP_high_coverage_Illumina.GSA_SNP2ID.filtered.SNV_INDEL_SV_phased_panel.vcf.gz
+```
+(note, that for whatever reason, the -W option with BCFtools is misbehaving. It makes an index, but search queries can fail.)
+
+
 ### cM 
 I repurposed a script from Amy Williams to add cM positions to a VCF file.
 The "hapmap" genetic map was used for the annotations a la:
