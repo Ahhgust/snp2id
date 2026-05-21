@@ -31,6 +31,7 @@ The data are provided on the following dropbox [link](https://www.dropbox.com/sc
 An example file is<br>
 ASW.NA19917.5.000000_GSA-24v3-0_A2.hg38.gnomadannos.autos.sites2include_1_0.2.vcf.gz <br>
 | Label | Meaning |
+| ---------- | ---------- |
 |ASW | African American (Southwest, 1kGP label) |
 |NA19917 | Sample ID (1kGP)  |
 |5.00000 | Mean read depth (autosomal, expected; ie, coverage) |
